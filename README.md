@@ -1,11 +1,9 @@
 # dump978-fa
 
-This is the FlightAware 978MHz UAT decoder.
+Fork of FlightAware's 978MHz UAT decoder with RTL_TCP remote SDR support.
 
 It is a reimplementation in C++, loosely based on the demodulator from
 https://github.com/mutability/dump978.
-
-For prebuilt Raspbian packages, see https://flightaware.com/adsb/piaware/install
 
 ## Overview
 
@@ -38,8 +36,8 @@ $ sudo dpkg -i ../dump978-fa_*.deb ../skyaware978_*.deb
 
 ## Building from source
 
- 1. Ensure SoapySDR and Boost are installed
- 2. 'make'
+  1. Ensure SoapySDR, Boost, and librtlsdr are installed
+  2. 'make'
 
 ## Installing the SoapySDR driver module
 
@@ -60,6 +58,8 @@ The main options are:
    SoapySDR. For a rtlsdr, try `--sdr driver=rtlsdr`. To select a
    particular rtlsdr dongle by serial number, try
    `--sdr driver=rtlsdr,serial=01234567`
+ * `--sdr rtl_tcp:<host>:<port>` connects to a remote RTL_TCP server.
+   If port is omitted, 1234 is used as default.
  * `--sdr-gain` sets the SDR gain (default: max)
  * `--raw-port` listens on the given TCP port and provides raw messages
  * `--json-port` listens on the given TCP port and provides decoded messages
