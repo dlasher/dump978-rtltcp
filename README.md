@@ -96,7 +96,7 @@ services:
     image: ghcr.io/dlasher/dump978-fa:latest
     network_mode: host
     environment:
-      - SDR_DEVICE=rtl_tcp:10.4.10.155:1234
+      - SDR_DEVICE=rtl_tcp:10.10.10.10:1234
       - RAW_PORT=30000
       - JSON_PORT=30001
     restart: on-failure
@@ -112,7 +112,7 @@ services:
       - "30000:30000"
       - "30001:30001"
     environment:
-      - SDR_DEVICE=rtl_tcp:10.4.10.155:1234
+      - SDR_DEVICE=rtl_tcp:10.10.10.10:1234
       - RAW_PORT=0.0.0.0:30000
       - JSON_PORT=0.0.0.0:30001
     restart: on-failure
@@ -125,7 +125,7 @@ services:
   dump978:
     image: ghcr.io/dlasher/dump978-fa:latest
     environment:
-      - SDR_DEVICE=rtl_tcp:10.4.10.155:1234
+      - SDR_DEVICE=rtl_tcp:10.10.10.10:1234
       - RAW_PORT=0.0.0.0:30000
       - JSON_PORT=0.0.0.0:30001
       - TZ=${FEEDER_TZ}
