@@ -18,6 +18,7 @@
 #include "message_dispatch.h"
 #include "sample_source.h"
 #include "soapy_source.h"
+#include "rtl_tcp_source.h"
 #include "socket_output.h"
 #include "stratux_serial.h"
 
@@ -142,7 +143,13 @@ static int realmain(int argc, char **argv) {
         sample_source = FileSampleSource::Create(io_service, path, opts);
     } else if (opts.count("sdr")) {
         auto device = opts["sdr"].as<std::string>();
-        sample_source = SoapySampleSource::Create(io_service, device, opts);
+        
+        // Check if RTL_TCP device
+        if (device.substr(0, 8) == "rtl_tcp:") {
+            sample_source = RtlTcpSampleSource::Create(io_service, device, opts);
+        } else {
+            sample_source = SoapySampleSource::Create(io_service, device, opts);
+        }
     } else if (opts.count("stratuxv3")) {
         auto path = opts["stratuxv3"].as<std::string>();
         message_source = StratuxSerial::Create(io_service, path);

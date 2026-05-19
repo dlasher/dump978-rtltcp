@@ -67,6 +67,91 @@ The main options are:
 
 Pass `--help` for a full list of options.
 
+## Docker
+
+### Building
+
+```bash
+docker build -t ghcr.io/dlasher/dump978-fa:latest .
+```
+
+### Environment Variables
+
+| Variable | Maps to | Default |
+|----------|---------|---------|
+| `SDR_DEVICE` | `--sdr` | required |
+| `RAW_PORT` | `--raw-port` | `30000` |
+| `JSON_PORT` | `--json-port` | `30001` |
+| `SDR_GAIN` | `--sdr-gain` | auto |
+| `SDR_PPM` | `--sdr-ppm` | not set |
+| `EXTRA_ARGS` | appended verbatim | empty |
+
+### Docker Compose
+
+**Host network mode** (simplest, no port mapping needed):
+
+```yaml
+services:
+  dump978:
+    image: ghcr.io/dlasher/dump978-fa:latest
+    network_mode: host
+    environment:
+      - SDR_DEVICE=rtl_tcp:10.4.10.155:1234
+      - RAW_PORT=30000
+      - JSON_PORT=30001
+    restart: on-failure
+```
+
+**Bridged network** (explicit port mapping):
+
+```yaml
+services:
+  dump978:
+    image: ghcr.io/dlasher/dump978-fa:latest
+    ports:
+      - "30000:30000"
+      - "30001:30001"
+    environment:
+      - SDR_DEVICE=rtl_tcp:10.4.10.155:1234
+      - RAW_PORT=0.0.0.0:30000
+      - JSON_PORT=0.0.0.0:30001
+    restart: on-failure
+```
+
+### Docker Swarm
+
+```yaml
+services:
+  dump978:
+    image: ghcr.io/dlasher/dump978-fa:latest
+    environment:
+      - SDR_DEVICE=rtl_tcp:10.4.10.155:1234
+      - RAW_PORT=0.0.0.0:30000
+      - JSON_PORT=0.0.0.0:30001
+      - TZ=${FEEDER_TZ}
+    networks:
+      - swarmnet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      placement:
+        constraints:
+          - node.hostname == adsb
+    healthcheck:
+      test: ["CMD-SHELL", "ss -tlnp | grep -E ':(30000|30001)' || netstat -tlnp 2>/dev/null | grep -E ':(30000|30001)'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+```
+
 ## Third-party code
 
 Third-party source code included in libs/:

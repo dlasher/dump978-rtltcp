@@ -127,6 +127,7 @@ namespace flightaware::uat {
         Bytes block_;
         std::size_t used_;
     };
+
 }; // namespace flightaware::uat
 
 #endif

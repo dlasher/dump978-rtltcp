@@ -1,0 +1,12 @@
+.git/
+.gitignore
+.dockerignore
+*.o
+docs/
+.opencode/
+AGENTS.md
+package-*/
+sample-data.txt.gz
+Dockerfile.old.*
+Dockerfile.readsb
+Dockerfile.sdrenthusiasts

@@ -1,6 +1,12 @@
 *~
+*.swp
 *.o
 dump978-fa
 skyview978
+skyaware978
 faup978
 fec_tests
+package-*/
+docs/
+.opencode/
+AGENTS.md
