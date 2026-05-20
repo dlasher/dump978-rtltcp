@@ -84,7 +84,26 @@ docker build -t ghcr.io/dlasher/dump978-rtltcp:latest .
 | `JSON_PORT` | `--json-port` | `30001` |
 | `SDR_GAIN` | `--sdr-gain` | auto |
 | `SDR_PPM` | `--sdr-ppm` | not set |
+| `BEAST_PORT` | Beast output via uat2esnt | not set |
 | `EXTRA_ARGS` | appended verbatim | empty |
+
+When `BEAST_PORT` is set, a uat2esnt converter runs alongside dump978-fa, converting
+raw UAT frames to Beast binary format on the given port (for readsb/ultrafeeder).
+
+**Recommended configuration with ultrafeeder:**
+
+```yaml
+dump978:
+  image: ghcr.io/dlasher/dump978-rtltcp:latest
+  environment:
+    - SDR_DEVICE=rtl_tcp:172.21.0.1:2345
+    - RAW_PORT=30000
+    - JSON_PORT=30001
+    - BEAST_PORT=37982
+```
+
+Ultrafeeder connects to `dump978:37982` with `beast_in` and receives
+Beast-format 978MHz data.
 
 ### Docker Compose
 
