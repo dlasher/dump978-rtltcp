@@ -41,6 +41,7 @@ RUN apt-get update && \
         librtlsdr0 \
         iproute2 \
         procps \
+        socat \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/dump978-fa /usr/local/bin/

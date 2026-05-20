@@ -1,6 +1,11 @@
 #!/bin/sh
 
-trap 'echo "DEBUG[entrypoint]: SIGTERM received at $(date)"' TERM
+if [ -n "$BEAST_PORT" ]; then
+    RAW_PORT_NUM="${RAW_PORT##*:}"
+    RAW_PORT_NUM="${RAW_PORT_NUM:-30000}"
+    socat TCP-LISTEN:${BEAST_PORT},fork,reuseaddr \
+        SYSTEM:"socat - TCP:127.0.0.1:${RAW_PORT_NUM} | /usr/local/bin/uat2esnt" &
+fi
 
 ARGS=""
 
@@ -23,8 +28,4 @@ if [ -n "$EXTRA_ARGS" ]; then
     ARGS="$ARGS $EXTRA_ARGS"
 fi
 
-/usr/local/bin/dump978-fa $ARGS "$@"
-EXIT_CODE=$?
-
-echo "DEBUG[entrypoint]: dump978-fa exited with code $EXIT_CODE"
-exit $EXIT_CODE
+exec /usr/local/bin/dump978-fa $ARGS "$@"
