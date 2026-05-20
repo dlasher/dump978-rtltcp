@@ -47,7 +47,7 @@ RUN chmod +x /usr/local/bin/dump978-fa /usr/local/bin/skyaware978 \
 
 EXPOSE 30000/tcp 30001/tcp
 
-HEALTHCHECK --start-period=30s --interval=30s --timeout=10s --retries=3 \
+HEALTHCHECK --start-period=10s --interval=15s --timeout=5s --retries=3 \
     CMD /usr/local/bin/healthcheck.sh
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
