@@ -3,8 +3,15 @@
 if [ -n "$BEAST_PORT" ]; then
     RAW_PORT_NUM="${RAW_PORT##*:}"
     RAW_PORT_NUM="${RAW_PORT_NUM:-30000}"
-    socat TCP-LISTEN:${BEAST_PORT},fork,reuseaddr \
-        SYSTEM:"socat - TCP:127.0.0.1:${RAW_PORT_NUM} | /usr/local/bin/uat2esnt" &
+
+    BRIDGE="/tmp/beast-bridge.sh"
+    cat > "$BRIDGE" << EOF
+#!/bin/sh
+socat - TCP:127.0.0.1:${RAW_PORT_NUM} | /usr/local/bin/uat2esnt
+EOF
+    chmod +x "$BRIDGE"
+
+    socat TCP-LISTEN:${BEAST_PORT},fork,reuseaddr EXEC:"$BRIDGE" &
 fi
 
 ARGS=""
