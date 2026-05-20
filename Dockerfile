@@ -33,7 +33,7 @@ RUN apt-get update && \
         libboost-filesystem1.74.0 \
         libsoapysdr0.8 \
         librtlsdr0 \
-        libcap2-bin \
+        iproute2 \
         procps \
     && rm -rf /var/lib/apt/lists/*
 

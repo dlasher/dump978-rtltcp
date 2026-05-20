@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: dlasher/dump978-fa
+  IMAGE_NAME: dlasher/dump978-rtltcp
 
 jobs:
   build:

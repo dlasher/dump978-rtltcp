@@ -237,6 +237,7 @@ static int realmain(int argc, char **argv) {
     }
 
     bool saw_error = false;
+    bool saw_signal = false;
 
     if (sample_source) {
         sample_source->Init();
@@ -263,9 +264,9 @@ static int realmain(int argc, char **argv) {
     });
 
     boost::asio::signal_set signals(io_service, SIGINT, SIGTERM);
-    signals.async_wait([&io_service, &saw_error](const boost::system::error_code &ec, int signum) {
+    signals.async_wait([&io_service, &saw_signal](const boost::system::error_code &ec, int signum) {
         std::cerr << "Caught signal " << signum << ", exiting" << std::endl;
-        saw_error = true;
+        saw_signal = true;
         io_service.stop();
     });
 
@@ -281,7 +282,10 @@ static int realmain(int argc, char **argv) {
     }
     message_source->Stop();
 
-    if (saw_error) {
+    if (saw_signal) {
+        std::cerr << "Normal shutdown" << std::endl;
+        return 0;
+    } else if (saw_error) {
         std::cerr << "Abnormal exit" << std::endl;
         return 1;
     } else {

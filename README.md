@@ -72,7 +72,7 @@ Pass `--help` for a full list of options.
 ### Building
 
 ```bash
-docker build -t ghcr.io/dlasher/dump978-fa:latest .
+docker build -t ghcr.io/dlasher/dump978-rtltcp:latest .
 ```
 
 ### Environment Variables
@@ -93,7 +93,7 @@ docker build -t ghcr.io/dlasher/dump978-fa:latest .
 ```yaml
 services:
   dump978:
-    image: ghcr.io/dlasher/dump978-fa:latest
+    image: ghcr.io/dlasher/dump978-rtltcp:latest
     network_mode: host
     environment:
       - SDR_DEVICE=rtl_tcp:10.10.10.10:1234
@@ -107,7 +107,7 @@ services:
 ```yaml
 services:
   dump978:
-    image: ghcr.io/dlasher/dump978-fa:latest
+    image: ghcr.io/dlasher/dump978-rtltcp:latest
     ports:
       - "30000:30000"
       - "30001:30001"
@@ -123,7 +123,7 @@ services:
 ```yaml
 services:
   dump978:
-    image: ghcr.io/dlasher/dump978-fa:latest
+    image: ghcr.io/dlasher/dump978-rtltcp:latest
     environment:
       - SDR_DEVICE=rtl_tcp:10.10.10.10:1234
       - RAW_PORT=0.0.0.0:30000
