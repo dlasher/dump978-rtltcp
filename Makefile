@@ -12,7 +12,7 @@ CXXFLAGS += -std=c++11 -Wall -Wno-psabi -Werror -O2 -g -Ilibs
 LIBS=-lboost_system -lboost_program_options -lboost_regex -lboost_filesystem -lpthread
 LIBS_SDR=-lSoapySDR
 
-all: dump978-fa skyaware978
+all: dump978-fa skyaware978 avr2beast
 
 LIBS_RTLTCP=-lrtlsdr
 
@@ -28,8 +28,11 @@ skyaware978: skyaware978_main.o socket_input.o uat_message.o track.o skyaware_wr
 fec_tests: fec_tests.o libs/fec/init_rs_char.o libs/fec/decode_rs_char.o libs/fec/encode_rs_char.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
 
+avr2beast: avr2beast.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
+
 format:
 	clang-format -style=file -i *.cc *.h
 
 clean:
-	rm -f *.o libs/fec/*.o dump978-fa faup978 skyaware978 fec_tests
+	rm -f *.o libs/fec/*.o dump978-fa faup978 skyaware978 fec_tests avr2beast

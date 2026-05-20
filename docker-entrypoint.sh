@@ -4,12 +4,10 @@ if [ -n "$BEAST_PORT" ]; then
     RAW_PORT_NUM="${RAW_PORT##*:}"
     RAW_PORT_NUM="${RAW_PORT_NUM:-30000}"
 
-    cat > /tmp/beast-bridge.sh << EOF
-#!/bin/sh
-socat TCP:127.0.0.1:${RAW_PORT_NUM} EXEC:/usr/local/bin/uat2esnt
-EOF
-    chmod +x /tmp/beast-bridge.sh
-    socat TCP-LISTEN:${BEAST_PORT},fork,reuseaddr EXEC:/tmp/beast-bridge.sh &
+    # Unidirectional: dump978 raw port → uat2esnt (UAT→1090ES) → avr2beast (AVR→binary Beast, with heartbeats)
+    # socat SYSTEM runs the pipeline via sh -c, connecting stdin/stdout to the TCP socket.
+    # avr2beast sends Beast heartbeat/status frames every 30s of inactivity.
+    socat TCP-LISTEN:${BEAST_PORT},fork,reuseaddr SYSTEM:"socat -u TCP:127.0.0.1:${RAW_PORT_NUM} STDOUT 2>/dev/null | /usr/local/bin/uat2esnt | /usr/local/bin/avr2beast" &
 fi
 
 ARGS=""

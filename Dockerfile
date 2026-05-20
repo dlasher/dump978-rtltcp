@@ -18,7 +18,7 @@ RUN apt-get update && \
 
 COPY . /app
 WORKDIR /app
-RUN make clean && make
+RUN make clean && make && make avr2beast
 
 # Build legacy uat2esnt (UAT raw frames → Beast binary converter)
 RUN gcc -O2 -g -Ilegacy -Ilegacy/fec -c legacy/uat2esnt.c -o /tmp/uat2esnt.o && \
@@ -47,10 +47,12 @@ RUN apt-get update && \
 COPY --from=builder /app/dump978-fa /usr/local/bin/
 COPY --from=builder /app/skyaware978 /usr/local/bin/
 COPY --from=builder /tmp/uat2esnt /usr/local/bin/
+COPY --from=builder /app/avr2beast /usr/local/bin/
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY healthcheck.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/dump978-fa /usr/local/bin/skyaware978 /usr/local/bin/uat2esnt \
+              /usr/local/bin/avr2beast \
               /usr/local/bin/docker-entrypoint.sh /usr/local/bin/healthcheck.sh
 
 EXPOSE 30000/tcp 30001/tcp 37982/tcp

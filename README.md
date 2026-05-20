@@ -87,8 +87,10 @@ docker build -t ghcr.io/dlasher/dump978-rtltcp:latest .
 | `BEAST_PORT` | Beast output via uat2esnt | not set |
 | `EXTRA_ARGS` | appended verbatim | empty |
 
-When `BEAST_PORT` is set, a uat2esnt converter runs alongside dump978-fa, converting
-raw UAT frames to Beast binary format on the given port (for readsb/ultrafeeder).
+When `BEAST_PORT` is set, a pipeline (`uat2esnt | avr2beast`) runs alongside
+dump978-fa, converting raw UAT frames to Beast binary format on the given port
+(for readsb/ultrafeeder). `avr2beast` also injects Beast heartbeat/status frames
+every 30s of inactivity to keep readers connected during silent periods.
 
 **Recommended configuration with ultrafeeder:**
 
