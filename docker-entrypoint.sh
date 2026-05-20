@@ -1,5 +1,6 @@
 #!/bin/sh
-set -e
+
+trap 'echo "DEBUG[entrypoint]: SIGTERM received at $(date)"' TERM
 
 ARGS=""
 
@@ -22,4 +23,8 @@ if [ -n "$EXTRA_ARGS" ]; then
     ARGS="$ARGS $EXTRA_ARGS"
 fi
 
-exec /usr/local/bin/dump978-fa $ARGS "$@"
+/usr/local/bin/dump978-fa $ARGS "$@"
+EXIT_CODE=$?
+
+echo "DEBUG[entrypoint]: dump978-fa exited with code $EXIT_CODE"
+exit $EXIT_CODE
